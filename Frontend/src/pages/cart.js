@@ -73,9 +73,9 @@ const Cart = (props) => {
 
   if (price !== 0) deliveryCharge = 20;
 
-  const onSubmit = (cinc,phone,totalAmount) => {
+  const onSubmit = (cinc, phone, totalAmount) => {
     setIsModelOpen(!isModelOpen);
-    handlePlaceOrder({cinc,phone,totalAmount});
+    handlePlaceOrder({ cinc, phone, totalAmount });
   };
 
   const handlePlaceOrder = (orderData) => {
@@ -86,7 +86,7 @@ const Cart = (props) => {
       zip: inputs.zip,
       phoneNo: inputs.phoneNo,
     };
-    dispatch(fetchAddress(userData,orderData, history));
+    dispatch(fetchAddress(userData, orderData, history));
   };
 
   const { inputs, handleInputChange } = useForm({
@@ -313,21 +313,21 @@ const Cart = (props) => {
                   {step === 2 && (
                     <div>
                       <Container
-                        triggerText="Place Order"
+                        triggerText="PLACE ORDER (Online)"
                         onSubmit={onSubmit}
-                        isModelOpen={isModelOpen} 
+                        isModelOpen={isModelOpen}
                         setIsModelOpen={setIsModelOpen}
-                        />
+                      />
                       <hr></hr>
-                    </div>
 
-                    // <Button
-                    //   fullWidth
-                    //   className={classes.checkoutButton}
-                    //   onClick={handlePlaceOrder}
-                    // >
-                    //   Place Order
-                    // </Button>
+                      <Button
+                        fullWidth
+                        className={classes.checkoutButton}
+                        onClick={handlePlaceOrder}
+                      >
+                        Place Order (Cash)
+                      </Button>
+                    </div>
                   )}
                 </div>
               </Paper>
