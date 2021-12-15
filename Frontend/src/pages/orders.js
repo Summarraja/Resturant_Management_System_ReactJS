@@ -54,28 +54,31 @@ const Orders = (props) => {
       <Typography variant="h5" className={classes.title}>
         Order History
       </Typography>
-      <CSVLink data={orders.map((order, i) => {
-        let obj = {
-          "S.no": i + 1,
-          "Restaurant": order.seller.name,
-          "Buyer Name": order.user.name,
-          "Buyer Email": order.user.email,
-          "Buyer Phone": order.user.address.phoneNo,
-          "Buyer Street": order.user.address.street,
-          "Buyer Locality": order.user.address.locality,
-          "Order Status": order.status,
-          "Items": order.items.map(item => item.item.title).join(' , '),
-          "Quantity": order.items.map(item => item.quantity).join(' , '),
-          "Prices": "Rs: " + order.items.map(item => item.item.price).join(' , Rs: '),
-          "Total Price": "Rs: " + order.items.map(item => item.item.price).reduce((partial_sum, a) => partial_sum + a, 0),
-        };
-        return obj
-      })}>
+      <CSVLink
+        data={orders.map((order, i) => {
+          let obj = {
+            "S.no": i + 1,
+            "Restaurant": order.seller.name,
+            "Buyer Name": order.user.name,
+            "Buyer Email": order.user.email,
+            "Buyer Phone": order.user.address.phoneNo,
+            "Buyer Street": order.user.address.street,
+            "Buyer Locality": order.user.address.locality,
+            "Order Status": order.status,
+            "Items": order.items.map(item => item.item.title).join(' , '),
+            "Quantity": order.items.map(item => item.quantity).join(' , '),
+            "Prices": "Rs: " + order.items.map(item => item.item.price).join(' , Rs: '),
+            "Total Price": "Rs: " + order.items.map(item => item.item.price).reduce((partial_sum, a) => partial_sum + a, 0),
+          };
+          return obj
+        })}
+        filename={"Orders Report.csv"}
+        >
         <Button
           variant="contained"
           color="default"
           className={classes.button}
-          // startIcon={}
+        // startIcon={}
         >
           Generate Report
         </Button>

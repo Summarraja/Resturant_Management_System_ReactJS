@@ -204,7 +204,7 @@ export const removeCartItem = (itemID) => (dispatch) => {
     });
 };
 
-export const fetchAddress = (userData, history) => (dispatch) => {
+export const fetchAddress = (userData, orderData, history) => (dispatch) => {
   const location = `+${userData.aptName},+${userData.locality},+${userData.street},+${userData.zip}`;
   axiosNewInstance
     .get("https://maps.googleapis.com/maps/api/geocode/json", {
@@ -221,14 +221,14 @@ export const fetchAddress = (userData, history) => (dispatch) => {
       userData.lat = lat;
       userData.lng = lng;
       userData.formattedAddress = formattedAddress;
-      dispatch(addAddress(userData, history));
+      dispatch(addAddress(userData, orderData, history));
     })
     .catch((err) => {
       console.log(err);
     });
 };
 
-export const addAddress = (userData, history) => (dispatch) => {
+export const addAddress = (userData, orderData, history) => (dispatch) => {
   console.log(userData.formattedAddress);
   axios
     .post("/user/address", userData)
@@ -236,7 +236,7 @@ export const addAddress = (userData, history) => (dispatch) => {
       // console.log(res.data);
       dispatch(getUserData());
       dispatch({ type: CLEAR_ERRORS });
-      dispatch(placeOrder(history));
+      dispatch(placeOrder(orderData, history));
     })
     .catch((err) => {
       console.log(err.response);
@@ -253,11 +253,45 @@ export const addAddress = (userData, history) => (dispatch) => {
     });
 };
 
-export const placeOrder = (history) => (dispatch) => {
+export const placeOrder = (orderData, history) => (dispatch) => {
   axios
     .post("/order")
     .then((res) => {
-      history.push("/orders");
+      console.log(orderData)
+      const params = {
+        pp_Language: "EN",
+        pp_TxnCurrency: "PKR",
+        pp_BillReference: "billRef",
+        // pp_MerchantID: "MC30087",
+        pp_MerchantID: "MC30038",
+        // pp_Password: "c822sue02b",
+        pp_Password: "912wwvxw90",
+        pp_Description: "Food Booking",
+        pp_TxnRefNo: `T20211215170526`,
+        // pp_TxnRefNo: `TXID8783271232130923`,
+        pp_TxnDateTime: "20211212153653",
+        pp_TxnExpiryDateTime: "20211213153653",
+        pp_SecureHash: "DADC40E5FFC41C375152334BBEF01C31ECE94080CCCBEAEB73575883CB0E6C3B",
+        // pp_Amount: '6000',
+        pp_Amount: orderData.totalAmount.toString(),
+        pp_CNIC: "345678",
+        // pp_CNIC: orderData.cnic,
+        pp_MobileNumber: "03123456789"
+        // pp_MobileNumber: orderData.phone
+      };
+      axios.post('http://localhost:8010/proxy/TransactionAPI/API/2.0/Purchase/DoMWalletTransaction', params,
+        {
+          'Content-Type': 'application/json'
+        })
+        .then(response => {
+          if (response.status == 200) {
+            history.push('/payment')
+          }
+          else {
+            history.push('/payment')
+          }
+        });
+      // history.push("/orders");
       dispatch(getOrders());
     })
     .catch((err) => {

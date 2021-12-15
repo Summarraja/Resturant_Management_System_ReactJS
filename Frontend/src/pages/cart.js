@@ -12,7 +12,9 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import { Container } from "./Container";
 import MyButton from "../util/MyButton";
+import axios from "axios";
 
 //custom-hook
 import useForm from "../hooks/forms";
@@ -51,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Cart = (props) => {
   const [step, setStep] = useState(1);
+  const [isModelOpen, setIsModelOpen] = useState(false);
 
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -70,7 +73,12 @@ const Cart = (props) => {
 
   if (price !== 0) deliveryCharge = 20;
 
-  const handlePlaceOrder = () => {
+  const onSubmit = (cinc,phone,totalAmount) => {
+    setIsModelOpen(!isModelOpen);
+    handlePlaceOrder({cinc,phone,totalAmount});
+  };
+
+  const handlePlaceOrder = (orderData) => {
     const userData = {
       street: inputs.street,
       aptName: inputs.aptName,
@@ -78,38 +86,38 @@ const Cart = (props) => {
       zip: inputs.zip,
       phoneNo: inputs.phoneNo,
     };
-    dispatch(fetchAddress(userData, history));
+    dispatch(fetchAddress(userData,orderData, history));
   };
 
   const { inputs, handleInputChange } = useForm({
     street:
       props.location.state.address != null &&
-      // eslint-disable-next-line
-      props.location.state.address != undefined
+        // eslint-disable-next-line
+        props.location.state.address != undefined
         ? props.location.state.address.street
         : "",
     locality:
       props.location.state.address != null &&
-      // eslint-disable-next-line
-      props.location.state.address != undefined
+        // eslint-disable-next-line
+        props.location.state.address != undefined
         ? props.location.state.address.locality
         : "",
     aptName:
       props.location.state.address != null &&
-      // eslint-disable-next-line
-      props.location.state.address != undefined
+        // eslint-disable-next-line
+        props.location.state.address != undefined
         ? props.location.state.address.aptName
         : "",
     zip:
       props.location.state.address != null &&
-      // eslint-disable-next-line
-      props.location.state.address != undefined
+        // eslint-disable-next-line
+        props.location.state.address != undefined
         ? props.location.state.address.zip
         : "",
     phoneNo:
       props.location.state.address != null &&
-      // eslint-disable-next-line
-      props.location.state.address != undefined
+        // eslint-disable-next-line
+        props.location.state.address != undefined
         ? props.location.state.address.phoneNo
         : "",
   });
@@ -303,19 +311,30 @@ const Cart = (props) => {
                     </Button>
                   )}
                   {step === 2 && (
-                    <Button
-                      fullWidth
-                      className={classes.checkoutButton}
-                      onClick={handlePlaceOrder}
-                    >
-                      Place Order
-                    </Button>
+                    <div>
+                      <Container
+                        triggerText="Place Order"
+                        onSubmit={onSubmit}
+                        isModelOpen={isModelOpen} 
+                        setIsModelOpen={setIsModelOpen}
+                        />
+                      <hr></hr>
+                    </div>
+
+                    // <Button
+                    //   fullWidth
+                    //   className={classes.checkoutButton}
+                    //   onClick={handlePlaceOrder}
+                    // >
+                    //   Place Order
+                    // </Button>
                   )}
                 </div>
               </Paper>
             </Grid>
             <Grid item sm={1} />
           </Grid>
+
         </>
       )}
     </>

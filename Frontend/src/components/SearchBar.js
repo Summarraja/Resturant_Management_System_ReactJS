@@ -17,7 +17,7 @@ import SearchIcon from "@material-ui/icons/Search";
 
 import axios from "axios";
 
-import { fetchRestaurantsByAddress, getOrders } from "../redux/actions/dataActions";
+import { fetchRestaurantsByAddress,getOrders } from "../redux/actions/dataActions";
 
 const useStyles = makeStyles((theme) => ({
   rootHome: {
@@ -69,7 +69,6 @@ export default function CustomizedInputBase(props) {
     navigator.geolocation.getCurrentPosition(
       function (position) {
         getUserAddressBy(position.coords.latitude, position.coords.longitude);
-        dispatch(getOrders());
       },
       function (error) {
         alert("The Locator was denied, Please add your address manually");
@@ -89,6 +88,7 @@ export default function CustomizedInputBase(props) {
 
   const fetchRestByLocation = (latlng) => {
     dispatch(fetchRestaurantsByAddress(latlng.lat, latlng.lng));
+    dispatch(getOrders());
     props.action(true);
   };
 

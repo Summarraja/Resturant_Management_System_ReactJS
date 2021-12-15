@@ -95,7 +95,7 @@ function Restaurant(props) {
                 Address: {addressString}
               </Typography>
               <Typography variant="body2" color="textPrimary">
-                Call: +92 {phoneNo}
+                Call: +91 {phoneNo}
               </Typography>
               <Typography variant="body2" color="textPrimary">
                 Dine-In Timing: 1pm to 12am

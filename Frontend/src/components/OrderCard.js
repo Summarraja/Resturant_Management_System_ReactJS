@@ -117,11 +117,11 @@ const OrderCard = (props) => {
         <Typography gutterBottom variant="body1" color="textPrimary">
           {role === "ROLE_USER" && `Ordered From - ${order.seller.name}`}
           {role === "ROLE_SELLER" &&
-            `Ordered By - ${order.user.name}, +92 ${order.user.address.phoneNo}`}
+            `Ordered By - ${order.user.name}, +91 ${order.user.address.phoneNo}`}
         </Typography>
         {role === "ROLE_USER" && (
           <Typography gutterBottom variant="body1" color="textPrimary">
-            Call - +92 {order.seller.phone}
+            Call - +91 {order.seller.phone}
           </Typography>
         )}
 

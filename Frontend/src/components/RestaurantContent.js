@@ -10,12 +10,15 @@ import RestaurantCard from "./RestaurantCard";
 const RestaurantContent = () => {
   const { restaurants, orders } = useSelector((state) => state.data);
   const restaurantArray = restaurants.restaurants;
-  let sortedArray = [];
+  let sortedArray;
   if (restaurantArray) {
-    sortedArray = restaurantArray.map(rest => {
-      rest.occurance = orders.filter(o => o.seller.sellerId === rest._id).length;
+    sortedArray = JSON.parse(JSON.stringify(restaurantArray))
+
+    sortedArray = sortedArray.map(rest => {
+      rest.occurance = orders.filter(o => o.seller.sellerId == rest._id).length;
       return rest
     })
+    console.log(sortedArray)
     sortedArray.sort((a, b) => (a.occurance < b.occurance) ? 1 : ((b.occurance < a.occurance) ? -1 : 0))
   }
   const getRestaurantCard = (restaurantObj) => {
