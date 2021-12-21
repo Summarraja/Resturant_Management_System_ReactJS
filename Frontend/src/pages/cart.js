@@ -169,7 +169,7 @@ const Cart = (props) => {
                   <CartItem {...item} key={item.itemId._id} />
                 ))}
               {step === 2 && (
-                <form>
+                <form className="border" >
                   <Typography
                     variant="body2"
                     component="p"

@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useState} from "react";
 import { useDispatch } from "react-redux";
 
 //m-ui
@@ -7,6 +7,8 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+
+import Container from "../pages/Container/CancelContainer";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -71,6 +73,8 @@ const OrderCard = (props) => {
   const role = props.role;
   const classes = useStyles();
   dayjs.extend(relativeTime);
+  const [isModelOpen, setIsModelOpen] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleCancel = () => {
@@ -90,6 +94,17 @@ const OrderCard = (props) => {
   const handleDelivery = () => {
     const body = {
       status: "Out For Delivery",
+    };
+    dispatch(changeOrderStatus(order._id, body));
+  };
+  
+  const onCancel = (reason) => {
+    console.log("reason");
+    console.log(reason);
+    setIsModelOpen(!isModelOpen);
+    const body = {
+      status: "Cancelled",
+      reason
     };
     dispatch(changeOrderStatus(order._id, body));
   };
@@ -117,11 +132,11 @@ const OrderCard = (props) => {
         <Typography gutterBottom variant="body1" color="textPrimary">
           {role === "ROLE_USER" && `Ordered From - ${order.seller.name}`}
           {role === "ROLE_SELLER" &&
-            `Ordered By - ${order.user.name}, +91 ${order.user.address.phoneNo}`}
+            `Ordered By - ${order.user.name}, +92 ${order.user.address.phoneNo}`}
         </Typography>
         {role === "ROLE_USER" && (
           <Typography gutterBottom variant="body1" color="textPrimary">
-            Call - +91 {order.seller.phone}
+            Call - +92 {order.seller.phone}
           </Typography>
         )}
 
@@ -149,17 +164,30 @@ const OrderCard = (props) => {
             }
           />
           <Typography gutterBottom variant="body1" color="textPrimary">
-            Order {order.status}
+            Order {order.status} <br></br>
+            { order.reason &&  
+           <> Reason : {order.reason} </>
+            }
           </Typography>
+          {/* <Typography gutterBottom variant="body1" color="textPrimary">
+            Reason :  {order.reason}
+          </Typography> */}
+          
         </div>
         {role === "ROLE_USER" && order.status === "Placed" && (
-          <Button
-            className={classes.buttonCancel}
-            onClick={handleCancel}
-            disabled={order.status !== "Placed"}
-          >
-            Cancel Order
-          </Button>
+          <Container
+          triggerText="Cancel Order"
+          onSubmit={onCancel}
+          isModelOpen={isModelOpen}
+          setIsModelOpen={setIsModelOpen}
+        />
+          // <Button
+          //   className={classes.buttonCancel}
+          //   onClick={handleCancel}
+          //   disabled={order.status !== "Placed"}
+          // >
+          //   Cancel Order
+          // </Button>
         )}
         {role === "ROLE_SELLER" && order.status === "Placed" && (
           <>

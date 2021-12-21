@@ -425,6 +425,7 @@ exports.postOrderStatus = (req, res, next) => {
     throw error;
   }
   const status = req.body.status;
+  const reason = req.body.reason;
   Order.findById(orderId)
     .then((order) => {
       if (!order) {
@@ -436,6 +437,7 @@ exports.postOrderStatus = (req, res, next) => {
       }
 
       order.status = status;
+      order.reason = reason;
       return order.save();
     })
     .then((updatedOrder) => {

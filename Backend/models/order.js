@@ -21,6 +21,9 @@ const orderSchema = new Schema(
         "Out For Delivery",
       ],
     },
+      reason: {
+        type: String,
+      },
     user: {
       email: {
         type: String,
